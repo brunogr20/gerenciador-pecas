@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    <style>
+    .panelGrid .ui-fluid{padding:10px}
+    </style>
+    </h:head>
+    <h:body>
+    
+      <h:form>
+		<p:panelGrid columns="4" layout="flex" rendered="#{LoginBean.exibirCadastro!=true}" class="panelGrid" style="width:390px;height:444px;margin:auto;margin-top:70;padding:0px" contentStyleClass=" ui-fluid">
+		    <h2 style="text-align:center;margin:0px">Login</h2>
+		      <p:messages id="messages1" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+		    <p:outputLabel for="loginEmail" value="CPF:" />
+		    <p:inputText id="loginEmail" value="#{LoginBean.txtCpf}" />
+		    <p:outputLabel for="loginSenha"  value="Senha:" />
+		    <p:password id="loginSenha" value="#{LoginBean.txtSenha}" />
+		    <p:selectBooleanCheckbox id="checkbox" itemLabel="Manter o conectado" /> 
+		    <br/>
+	        <p:commandButton value="Entrar" id="loginButton" actionListener="#{LoginBean.entrar}" update="@form" style="margin-right:20px;" styleClass="ui-priority-primary" />
+			<p:commandLink id="loginCad" action="#{LoginBean.toggleExibicao}" update="@form"  style="margin-left:110px;" ajax="true">
+		       <h:outputText value="Criar um Usuário" style="margin:auto" />
+		    </p:commandLink>  
+		
+		</p:panelGrid>
+			<p:panelGrid columns="4" layout="flex" rendered="#{LoginBean.exibirCadastro}" class="panelGrid" style="width:410px;height:444px;margin:auto;margin-top:70;padding:0px" contentStyleClass=" ui-fluid">
+		    <h2 style="text-align:center;margin:0px">Cadastro de Usuários</h2>
+		     <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+		    <p:outputLabel for="cadNome" value="Nome*:" />
+		    <p:inputText id="cadNome" value="#{UsuarioCadastroBean.txtNome}" />
+		    
+		    <p:outputLabel for="cadCpf" value="CPF*:" />
+		    <p:inputText id="cadCpf" value="#{UsuarioCadastroBean.txtCpf}" />
+		    
+		    <p:outputLabel for="cadEmail" value="E-mail*:" />
+		    <p:inputText id="cadEmail"  value="#{UsuarioCadastroBean.txtEmail}" />
+		    
+		    <p:outputLabel for="cadSexo" value="Sexo*:" />
+		     <p:selectOneMenu id="cadSexo" value="#{UsuarioCadastroBean.txtSexo}">
+              <f:selectItem itemLabel="Escolha uma opção" itemValue="" />
+              <f:selectItem itemLabel="Feminino" itemValue="F" />
+                <f:selectItem itemLabel="Masculino" itemValue="M" />
+            </p:selectOneMenu>
+		    <p:outputLabel for="cadSenha" value="Senha:*" />
+		    <p:password id="cadSenha" value="#{UsuarioCadastroBean.txtSenha}" />
+		    <p:outputLabel for="cadConfSenha" value="Confirmar Senha:*" />
+		    <p:password id="cadConfSenha"  value="#{UsuarioCadastroBean.txtConfSenha}" />
+		    <br/>
+	        <p:commandButton value="Cadastrar"  action="#{UsuarioCadastroBean.cadastrarUsuario}" id="cadButton" update="@form" style="margin-right:20px;" styleClass="ui-priority-primary" />
+			<p:commandLink id="cadLogin" action="#{LoginBean.toggleExibicao}" update="@form" style="margin-left:160px;" ajax="true">
+		       <h:outputText value="Login" style="margin:auto" />
+		    </p:commandLink>  
+		
+		</p:panelGrid>
+		</h:form>
+    
+    </h:body>
+</html>
