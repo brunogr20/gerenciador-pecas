@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.faces.application.FacesMessage;
@@ -16,17 +17,17 @@ import entities.Usuario;
 public class LoginBean implements Serializable {
 
 	private boolean exibirCadastro = false;
-	private String loginRedirect = "calculadora.xhtml";
+	private String loginRedirect = "livros.xhtml";
 
-	private String txtCpf = "";
+	private String txtEmail = "";
 	private String txtSenha = "";
 
-	public String getTxtCpf() {
-		return txtCpf;
+	public String getTxtEmail() {
+		return txtEmail;
 	}
 
-	public void setTxtCpf(String txtCpf) {
-		this.txtCpf = txtCpf;
+	public void setTxtEmail(String txtEmail) {
+		this.txtEmail = txtEmail;
 	}
 
 	public String getTxtSenha() {
@@ -45,33 +46,31 @@ public class LoginBean implements Serializable {
 		this.exibirCadastro = exibirCadastro;
 	}
 
-	public String entrar() {
+	public boolean entrar() throws IOException {
 		
-		if(this.getTxtCpf().isEmpty()) {
-			this.alert("ATENCAO","Preecha o campo CPF!");
-           return "";				
+		if(this.getTxtEmail().isEmpty()) {
+			this.alert("ATENCAO","Preecha o campo e-mail!");
+           return false;				
+		}
+		if (this.getTxtEmail().indexOf("@")<1) {
+			this.alert("ATENCAO", "O e-mail é inválido!");
+			return false;
 		}
 		if(this.getTxtSenha().isEmpty()) {
 			this.alert("ATENCAO","Preecha o campo senha!");
-           return "";				
+           return false;				
 		}
 		UsuarioDao usuarioDao = new UsuarioDao();
-		ArrayList<Usuario> usuarios = usuarioDao.getInstance().getUsuarios();
 		
-		boolean existeUsario =false;
-		System.out.println(usuarios.toString());
-		for(Usuario u : usuarios){
-			if(u.getCpf().equals(this.getTxtCpf())&&u.getSenha().equals(this.getTxtSenha())) {
-				existeUsario=true;
-			}
-		}
-		
-		if(existeUsario==true) {
+		if(usuarioDao.login(this.getTxtEmail(),this.getTxtSenha())) {
 			this.alert("SUCCESSO","Usuario logado com sucesso!");
-			return this.loginRedirect;
+			FacesContext.getCurrentInstance().getExternalContext().redirect(this.loginRedirect);
+			this.setTxtEmail("");
+			this.setTxtSenha("");
+			return true;
 		}else {
 			this.alert("ATENCAO","E-mail ou senha não encontrado!");
-			return "";
+			return false;
 		}
 		
 		
