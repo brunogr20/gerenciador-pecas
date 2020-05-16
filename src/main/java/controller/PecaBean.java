@@ -7,49 +7,49 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import dao.VeiculoDao;
-import entities.Veiculo;
+import dao.PecaDao;
+import entities.Peca; 
 
-@ManagedBean(name = "VeiculoBean")
+@ManagedBean(name = "PecaBean")
 @SessionScoped
 @ApplicationScoped
-public class VeiculoBean extends GenericBean {
+public class PecaBean extends GenericBean {
 
-	private List<Veiculo> veiculos;
-	private List<Veiculo> filteredItens;
-	private Veiculo veiculo;
+	private List<Peca> pecas;
+	private List<Peca> filteredItens;
+	private Peca peca;
 
-	VeiculoDao veiculoDao;
+	PecaDao pecaDao;
 
-	public VeiculoBean(){
-		veiculoDao = new  VeiculoDao();
+	public PecaBean(){
+		pecaDao = new  PecaDao();
 		
-		this.veiculo = new Veiculo();
+		this.peca = new Peca();
 		this.loadGrid();     	        
 	}
 
-	public void setVeiculos(List<Veiculo> veiculos) {
-		this.veiculos = veiculos;
+	public void setPecas(List<Peca> pecas) {
+		this.pecas = pecas;
 	}
 
-	public List<Veiculo> getVeiculos() {
-		return veiculos;
+	public List<Peca> getPecas() {
+		return pecas;
 	}
 
-	public List<Veiculo> getFilteredItens() {
+	public List<Peca> getFilteredItens() {
 		return filteredItens;
 	}
 
-	public void setFilteredItens(List<Veiculo> filteredItens) {
+	public void setFilteredItens(List<Peca> filteredItens) {
 		this.filteredItens = filteredItens;
 	}
 
-	public Veiculo getVeiculo() {
-		return this.veiculo;
+	public Peca getPeca() {
+		return this.peca;
 	}
 
-	public void setVeiculo(Veiculo veiculo) {
-		this.veiculo = veiculo;
+	public void setPeca(Peca peca) {
+		this.peca = peca;
 	}
 	
 	public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
@@ -60,15 +60,17 @@ public class VeiculoBean extends GenericBean {
 
 		int filterInt = this.getInteger(filterText);
 
-		Veiculo item = (Veiculo) value;
+		Peca item = (Peca) value;
 
-		// if(!livro.getId().equals("")&&livro.getId()==filterText) {
-		if (item.getPlaca() != null && item.getPlaca().toString().contains(filterText)) {
+		 if(item.getId() != null&&item.getId()==filterInt) {
+		//if (item.getId() != null && item.getId().toLowerCase().contains(filterText)) {
 			return true;
 		}
-		if (item.getMarca() != null && item.getMarca().toLowerCase().contains(filterText)) {
+		
+		if (item.getNome() != null && item.getNome().toString().contains(filterText)) {
 			return true;
 		}
+		
 		if (item.getDescricao() != null && item.getDescricao().toLowerCase().contains(filterText)) {
 			return true;
 		}
@@ -77,13 +79,13 @@ public class VeiculoBean extends GenericBean {
 	}
 
 	public void loadGrid() {
-		this.veiculos = VeiculoDao.getInstance().getList("");
+		this.pecas = PecaDao.getInstance().getList("");
 	}
 
 	public void editForm() {
 		this.setTitleTabFrom("Edição");
 		this.setCreateItem(false);
-		this.veiculo = this.veiculos.get(this.getIndexSelected());
+		this.peca = this.pecas.get(this.getIndexSelected());
 	}
 
 	public void create() {
@@ -93,12 +95,12 @@ public class VeiculoBean extends GenericBean {
 	public void cleanForm() {
 		this.setTitleTabFrom("Inserção");
 		this.setCreateItem(true);
-		this.veiculo = new Veiculo();
+		this.peca = new Peca();
 	}
 
 	public boolean save() {
 
-		if (this.veiculo.getPlaca() == null || this.veiculo.getPlaca().equals("")) {
+		if (this.peca.getNome() == null || this.peca.getNome().equals("")) {
 			this.addMessage("WARNING", "Preencha o campo placa!");
 			return false;
 		}
@@ -117,9 +119,9 @@ public class VeiculoBean extends GenericBean {
 
 		boolean status;
 		if (this.isCreateItem()) {
-			status = veiculoDao.getInstance().create(veiculo);
+			status = pecaDao.getInstance().create(peca);
 		} else {
-			status = veiculoDao.getInstance().update(veiculo);
+			status = pecaDao.getInstance().update(peca);
 		}
 
 		if (status == true) {
@@ -133,7 +135,7 @@ public class VeiculoBean extends GenericBean {
 	}
 
 	public void delete() {
-		if (veiculoDao.getInstance().delete(this.veiculos.get(this.getIndexSelected()))) {
+		if (pecaDao.getInstance().delete(this.pecas.get(this.getIndexSelected()))) {
 			this.addMessage("SUCCESS", "Item deletado com sucesso!");
 			this.cleanForm();
 			this.loadGrid();
@@ -143,3 +145,4 @@ public class VeiculoBean extends GenericBean {
 	}
 
 }
+

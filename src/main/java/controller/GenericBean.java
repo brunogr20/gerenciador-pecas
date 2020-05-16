@@ -10,6 +10,7 @@ public class GenericBean<Generic> {
 	
 	private String titleTabFrom = "Inserção";
 	private int indexSelected;
+	private boolean createItem = true;
 	
 	
 	
@@ -27,6 +28,14 @@ public class GenericBean<Generic> {
 
 	public void setIndexSelected(int indexSelected) {
 		this.indexSelected = indexSelected;
+	}
+	
+	public boolean isCreateItem() {
+		return createItem;
+	}
+
+	public void setCreateItem(boolean createItem) {
+		this.createItem = createItem;
 	}
 	
 	/*

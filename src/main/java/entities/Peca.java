@@ -8,7 +8,7 @@ public class Peca {
 	private double valor;
 	private boolean status;
 	
-	
+	public Peca() {}
 	public Peca(Long id, String nome, String descricao, double valor, boolean status) {
 		this.id = id;
 		this.nome = nome;
@@ -58,7 +58,7 @@ public class Peca {
 	}
 
 
-	public boolean isStatus() {
+	public boolean getStatus() {
 		return status;
 	}
 

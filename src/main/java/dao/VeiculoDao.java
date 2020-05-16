@@ -32,7 +32,7 @@ public class VeiculoDao implements CRUD<Veiculo> {
 
 			while (rs.next()) {
 				veiculos.add(new Veiculo(rs.getString("PLACA"), "", rs.getString("MARCA"), rs.getString("MODELO"),
-						rs.getString("DESCRICAO"), rs.getString("CHASSI"), rs.getBoolean("STATUS")));
+						 rs.getString("CHASSI"),rs.getString("DESCRICAO"), rs.getBoolean("STATUS")));
 			}
 			conn.close();
 		} catch (Exception e) {
@@ -98,7 +98,7 @@ public class VeiculoDao implements CRUD<Veiculo> {
 			status = true;
 			conn.close();
 		} catch (Exception e) {
-			System.out.println("Error update: " + e.getMessage());
+			System.out.println("Error delete: " + e.getMessage());
 			status = false;
 		}
 
