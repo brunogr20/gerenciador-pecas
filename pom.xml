@@ -38,12 +38,6 @@
           <artifactId>javax.inject</artifactId>
           <version>1</version>
        </dependency>
-       <!-- PROVIDER JPA(HIBERNATE) -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.3.0.Final</version>
-		</dependency>
 		<!-- ORACLE -->
 		<dependency>
 			<groupId>com.oracle</groupId>
@@ -52,7 +46,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>TurmaSefaz2</finalName>
+		<finalName>GerenciadorPecas</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

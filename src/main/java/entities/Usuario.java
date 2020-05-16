@@ -1,28 +1,17 @@
 package entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity(name="USUARIO")
 public class Usuario {
-    @Id
-    @Column(name="CPF")
+
 	private String cpf;
     
-    @Column(name="NOME")
 	private String nome;
     
-    @Column(name="EMAIL")
 	private String email;
-    
-    @Column(name="SEXO")
+
 	private String sexo;
     
-    @Column(name="SENHA")
 	private String senha;
-	
-	
+		
 	public Usuario(String nome,String cpf, String email, String sexo, String senha) {
 		this.nome = nome;
 		this.cpf = cpf;
