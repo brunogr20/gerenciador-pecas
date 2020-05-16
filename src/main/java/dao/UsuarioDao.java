@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +25,9 @@ public class UsuarioDao {
 	 */
 
 	public boolean create(Usuario usuario) {
-		boolean status=false;
+		boolean status = false;
 		try {
 			Connection conn = ConnectionDBUtil.gecConnection();
-
 			String sql = "INSERT INTO USUARIO (CPF,NOME,EMAIL,SEXO,SENHA) VALUES (?,?,?,?,?)";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, usuario.getCpf());
@@ -38,9 +38,10 @@ public class UsuarioDao {
 
 			ps.execute();
 			status = true;
-		} catch (Exception e){
-			System.out.println("Error: "+e.getMessage());
-		 status = false;
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+			status = false;
 		}
 
 		return status;
@@ -50,9 +51,23 @@ public class UsuarioDao {
 		return true;
 	}
 
-	public boolean sinbleField(String type, String field) {
-		String sql = "";
+	public boolean sinbleField(String field, String value) {
 		boolean status = true;
+		try {
+			Connection conn = ConnectionDBUtil.gecConnection();
+			String sql = "SELECT CPF FROM USUARIO WHERE "+field+"= '"+value+"'";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			//ps.setString(1,value);
+			 
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+			   status = false;
+			}
+		
+		} catch (Exception e) {
+			System.out.println("Error: "+e.getMessage());
+			status = false;
+		}
 
 		return status;
 	}

@@ -116,6 +116,10 @@ public class UsuarioCadastroBean {
 			this.alert("ATENCAO", "Já existe um usuário cadastro com esse CPF!");
 			return false;
 		}
+		if (!usuarioDao.sinbleField("EMAIL", this.getTxtEmail())) {
+			this.alert("ATENCAO", "Já existe um usuário cadastro com esse EMAIL!");
+			return false;
+		}
 
 		Usuario usuario = new Usuario(this.getTxtNome(), this.getTxtCpf(), this.getTxtEmail(), this.getTxtSexo(),
 				this.getTxtSenha());
