@@ -2,6 +2,7 @@ package dao;
 
 import iface.CRUD;
 import util.ConnectionDBUtil;
+import util.HashUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,7 +26,7 @@ public class VeiculoDao implements CRUD<Veiculo> {
 		try {
 			Connection conn = ConnectionDBUtil.gecConnection();
 
-			String sql = "SELECT CPF FROM VEICULO WHERE ";
+			String sql = "SELECT PLACA,MARCA,MODELO,DESCRICAO,CHASSI,STATUS FROM VEICULO  ";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 
@@ -40,19 +41,68 @@ public class VeiculoDao implements CRUD<Veiculo> {
 		return veiculos;
 	}
 
-	public boolean create(Veiculo entity) {
-		return true;
+	public boolean create(Veiculo veiculo) {
+		boolean status = false;
+		try {
+			Connection conn = ConnectionDBUtil.gecConnection();
+			String sql = "INSERT INTO VEICULO (PLACA,MARCA,MODELO,CHASSI,DESCRICAO,STATUS) VALUES (?,?,?,?,?,?)";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, veiculo.getPlaca());
+			ps.setString(2, veiculo.getMarca());
+			ps.setString(3, veiculo.getModelo());
+			ps.setString(4, veiculo.getChassi());
+			ps.setString(5, veiculo.getDescricao());
+			ps.setBoolean(6, veiculo.getStatus());
+
+			ps.execute();
+			status = true;
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+			status = false;
+		}
+
+		return status;
 	}
 
-	public boolean update(Veiculo entity) {
+	public boolean update(Veiculo veiculo) {
+		boolean status = false;
+		try {
+			Connection conn = ConnectionDBUtil.gecConnection();
+			String sql = "UPDATE VEICULO SET DESCRICAO=?,STATUS=? WHERE PLACA=?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, veiculo.getDescricao());
+			ps.setBoolean(2, veiculo.getStatus());
+			ps.setString(3, veiculo.getPlaca());
 
-		return true;
+			ps.execute();
+			status = true;
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("Error update: " + e.getMessage());
+			status = false;
+		}
+
+		return status;
 	}
 
-	public boolean delete(Veiculo entity) {
+	public boolean delete(Veiculo veiculo) {
+		boolean status = false;
+		try {
+			Connection conn = ConnectionDBUtil.gecConnection();
+			String sql = "DELETE FROM VEICULO WHERE PLACA=?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, veiculo.getPlaca());
 
-		return true;
+			ps.execute();
+			status = true;
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("Error update: " + e.getMessage());
+			status = false;
+		}
 
+		return status;
 	};
 
 }

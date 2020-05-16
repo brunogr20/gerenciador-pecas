@@ -27,7 +27,7 @@
 					currentPageReportTemplate="{startRecord} - {endRecord} de {totalRecords} Registros"
 					rowsPerPageTemplate="10,50,100,300,500,{ShowAll|'Todos'}"
 					emptyMessage="Nenhum resultado foi encontrado"
-					filteredValue="#{LivroBean.filteredItens}"
+					filteredValue="#{VeiculoBean.filteredItens}"
 					globalFilterFunction="#{VeiculoBean.globalFilterFunction}"
 					scrollable="true" scrollHeight="380">
 					<f:facet name="header">
@@ -42,28 +42,28 @@
 							</div>
 						</p:outputPanel>
 					</f:facet>
-					<p:column headerText="Id" style="width:50px;">
-						<h:outputText value="#{item.plca}" />
+					<p:column headerText="Placa" style="width:60px;">
+						<h:outputText value="#{item.placa}" />
 					</p:column>
 
-					<p:column headerText="Nome">
+					<p:column headerText="Marca">
 						<h:outputText value="#{item.marca}" />
 					</p:column>
 
-					<p:column headerText="Descrição">
+					<p:column headerText="Modelo">
 						<h:outputText value="#{item.modelo}" />
 					</p:column>
-					<p:column headerText="Visivel">
+					<p:column headerText="Visível"  style="width:50px;">
 						<h:outputText value="#{item.status}" />
 					</p:column>
 					<!-- p:column style="width:20px">
 						<p:rowEditor />
 					</p:column-->
 					<p:column style="width:35px;text-align: center">
-						<p:commandButton action="#{LivroBean.editForm}"
+						<p:commandButton action="#{VeiculoBean.editForm}"
 							icon="pi pi-pencil" update="@form" title="Editar">
 							<f:setPropertyActionListener value="#{rowIdx}"
-								target="#{LivroBean.indexSelected}" />
+								target="#{VeiculoBean.indexSelected}" />
 						</p:commandButton>
 					</p:column>
 					<p:column style="width:35px;text-align: center">
@@ -87,11 +87,13 @@
 							<p:outputLabel value="Visível: " />
 							<p:selectBooleanCheckbox value="#{VeiculoBean.veiculo.status}" itemLabel=""/>
 							<p:outputLabel value="Placa*: " />
-							<p:inputText class="input" value="#{VeiculoBean.veiculo.placa}" />
-							<p:outputLabel value="Marca*: " />
-							<p:inputText class="input" value="#{VeiculoBean.veiculo.modelo}" />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.placa}"  disabled="#{!(VeiculoBean.createItem)}" />
+									<p:outputLabel value="Marca*: " />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.marca}" disabled="#{!(VeiculoBean.createItem)}" />
+							<p:outputLabel value="Modelo*: " />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.modelo}" disabled="#{!(VeiculoBean.createItem)}" />
 							<p:outputLabel value="Chassi*: " />
-							<p:inputText class="input" value="#{VeiculoBean.veiculo.chassi}" />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.chassi}" disabled="#{!(VeiculoBean.createItem)}" />
 							<p:outputLabel value="Descrição: " />
 							<p:inputTextarea class="input"
 								value="#{VeiculoBean.veiculo.descricao}" rows="2" cols="40" />
@@ -103,11 +105,11 @@
 							styleClass="ui-priority-primary" />
 						<p:commandButton value="Limpar" id="buttonClean1" update="@form"
 							style="width:100px;margin-right:10px;"
-							action="#{LivroBean.cleanForm}" styleClass="ui-priority-primary" />
+							action="#{VeiculoBean.cleanForm}" styleClass="ui-priority-primary" />
 
 					</p:tab>
 					<p:tab title="Peças">
-
+<!-- 
 						<p:selectManyCheckbox id="grid2"
 							value="#{LivroBean.selectedCities2}" layout="responsive"
 							columns="1">
@@ -123,6 +125,7 @@
 							action="#{LivroBean.cleanForm}" update="@form"
 							style="width:100px;margin-right:10px;"
 							styleClass="ui-priority-primary" />
+							 -->
 					</p:tab>
 				</p:tabView>
 

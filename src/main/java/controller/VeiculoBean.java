@@ -92,6 +92,7 @@ public class VeiculoBean extends GenericBean {
 
 	public void editForm() {
 		this.setTitleTabFrom("Edição");
+		this.setCreateItem(false);
 		this.veiculo = this.veiculos.get(this.getIndexSelected());
 	}
 
@@ -101,6 +102,7 @@ public class VeiculoBean extends GenericBean {
 
 	public void cleanForm() {
 		this.setTitleTabFrom("Inserção");
+		this.setCreateItem(true);
 		this.veiculo = new Veiculo();
 	}
 
@@ -124,6 +126,7 @@ public class VeiculoBean extends GenericBean {
 		 */
 
 		boolean status;
+		System.out.println(this.isCreateItem());
 		if (this.isCreateItem()) {
 			status = veiculoDao.getInstance().create(veiculo);
 		} else {
