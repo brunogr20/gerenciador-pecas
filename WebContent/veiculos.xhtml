@@ -1,0 +1,142 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/styles/main.css"
+		media="screen" />
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+</h:head>
+
+<h:body>
+	<h:form>
+		<ui:include src="/templates/menu.xhtml" />
+		<!--p:graphicImage value="/storage/edit-tools.png" /-->
+		<h3
+			style="margin: 0px; margin-left: 9px; font-family: Arial, sans-serif;">Veículos</h3>
+
+		<div class="ui-g">
+			<div class="ui-g-6">
+				<p:dataTable var="item" value="#{VeiculoBean.veiculos}"
+					widgetVar="tableGrid" rowIndexVar="rowIdx" rows="10"
+					paginator="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="{startRecord} - {endRecord} de {totalRecords} Registros"
+					rowsPerPageTemplate="10,50,100,300,500,{ShowAll|'Todos'}"
+					emptyMessage="Nenhum resultado foi encontrado"
+					filteredValue="#{LivroBean.filteredItens}"
+					globalFilterFunction="#{VeiculoBean.globalFilterFunction}"
+					scrollable="true" scrollHeight="380">
+					<f:facet name="header">
+						<p:outputPanel>
+							<p:commandButton value="Novo" action="#{VeiculoBean.create}"
+								update="@form" id="newRecord" styleClass="ui-priority-primary" />
+							<div>
+								<h:outputText value="Buscar: " />
+								<p:inputText id="globalFilter"
+									onkeyup="PF('tableGrid').filter()" style="width:150px"
+									placeholder="" />
+							</div>
+						</p:outputPanel>
+					</f:facet>
+					<p:column headerText="Id" style="width:50px;">
+						<h:outputText value="#{item.plca}" />
+					</p:column>
+
+					<p:column headerText="Nome">
+						<h:outputText value="#{item.marca}" />
+					</p:column>
+
+					<p:column headerText="Descrição">
+						<h:outputText value="#{item.modelo}" />
+					</p:column>
+					<p:column headerText="Visivel">
+						<h:outputText value="#{item.status}" />
+					</p:column>
+					<!-- p:column style="width:20px">
+						<p:rowEditor />
+					</p:column-->
+					<p:column style="width:35px;text-align: center">
+						<p:commandButton action="#{LivroBean.editForm}"
+							icon="pi pi-pencil" update="@form" title="Editar">
+							<f:setPropertyActionListener value="#{rowIdx}"
+								target="#{LivroBean.indexSelected}" />
+						</p:commandButton>
+					</p:column>
+					<p:column style="width:35px;text-align: center">
+						<p:commandButton action="#{VeiculoBean.delete}" icon="pi pi-trash"
+							update="@form" title="Deletar">
+							<f:setPropertyActionListener value="#{rowIdx}"
+								target="#{VeiculoBean.indexSelected}" />
+							<p:confirm header="Confirmation"
+								message="Deseja deletar esse item?"
+								icon="pi pi-exclamation-triangle" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+			<div class="ui-g-6">
+				<p:tabView scrollable="true">
+					<p:tab title="#{VeiculoBean.titleTabFrom}">
+
+						<p:panelGrid columns="2" style="width:100%">
+							<p:outputLabel value="Visível: " />
+							<p:selectBooleanCheckbox value="#{VeiculoBean.veiculo.status}" itemLabel=""/>
+							<p:outputLabel value="Placa*: " />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.placa}" />
+							<p:outputLabel value="Marca*: " />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.modelo}" />
+							<p:outputLabel value="Chassi*: " />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.chassi}" />
+							<p:outputLabel value="Descrição: " />
+							<p:inputTextarea class="input"
+								value="#{VeiculoBean.veiculo.descricao}" rows="2" cols="40" />
+						</p:panelGrid>
+						<hr />
+						<p:commandButton value="Salvar" action="#{VeiculoBean.save}"
+							id="buttonSalvar1" update="@form"
+							style="width:100px;margin-right:10px;"
+							styleClass="ui-priority-primary" />
+						<p:commandButton value="Limpar" id="buttonClean1" update="@form"
+							style="width:100px;margin-right:10px;"
+							action="#{LivroBean.cleanForm}" styleClass="ui-priority-primary" />
+
+					</p:tab>
+					<p:tab title="Peças">
+
+						<p:selectManyCheckbox id="grid2"
+							value="#{LivroBean.selectedCities2}" layout="responsive"
+							columns="1">
+							<f:selectItems value="#{LivroBean.cities}" var="city"
+								itemLabel="#{city}" itemValue="#{city}" />
+						</p:selectManyCheckbox>
+						<hr />
+						<p:commandButton value="Salvar" action="#{LivroBean.save}"
+							id="buttonSalvar2" update="@form"
+							style="width:100px;margin-right:10px;"
+							styleClass="ui-priority-primary" />
+						<p:commandButton value="Limpar" id="buttonClean2"
+							action="#{LivroBean.cleanForm}" update="@form"
+							style="width:100px;margin-right:10px;"
+							styleClass="ui-priority-primary" />
+					</p:tab>
+				</p:tabView>
+
+			</div>
+		</div>
+
+		<p:growl id="message" showDetail="true" />
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Yes" type="button"
+				styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+			<p:commandButton value="No" type="button"
+				styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+		</p:confirmDialog>
+	</h:form>
+
+</h:body>
+</html>
