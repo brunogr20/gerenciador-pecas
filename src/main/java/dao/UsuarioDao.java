@@ -47,8 +47,25 @@ public class UsuarioDao {
 		return status;
 	}
 
-	public boolean login(String cpf, String senha) {
-		return true;
+	public Usuario login(String email, String senha) {
+		Usuario usuario = null;
+		senha = HashUtil.getHash(senha);
+		try {
+			Connection conn = ConnectionDBUtil.gecConnection();
+			String sql = "SELECT CPF,NOME,EMAIL,SEXO FROM USUARIO WHERE EMAIL='"+email+" AND SENHA='"+senha+"'";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			//ps.setString(1,value);
+			 
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				usuario = new Usuario(rs.getString("CPF"),rs.getString("NOME"),rs.getString("EMAIL"),rs.getString("SEXO"),"");
+			}
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("Error: "+e.getMessage());
+		}
+		System.out.println(usuario);
+		return usuario;
 	}
 
 	public boolean sinbleField(String field, String value) {
@@ -63,7 +80,7 @@ public class UsuarioDao {
 			if(rs.next()){
 			   status = false;
 			}
-		
+			conn.close();
 		} catch (Exception e) {
 			System.out.println("Error: "+e.getMessage());
 			status = false;

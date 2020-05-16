@@ -61,10 +61,10 @@ public class LoginBean implements Serializable {
            return false;				
 		}
 		UsuarioDao usuarioDao = new UsuarioDao();
-		
-		if(usuarioDao.login(this.getTxtEmail(),this.getTxtSenha())) {
+		 Usuario userLoged = usuarioDao.login(this.getTxtEmail(),this.getTxtSenha());
+		if(userLoged!=null) {
 			this.alert("SUCCESSO","Usuario logado com sucesso!");
-			FacesContext.getCurrentInstance().getExternalContext().redirect(this.loginRedirect);
+			//FacesContext.getCurrentInstance().getExternalContext().redirect(this.loginRedirect);
 			this.setTxtEmail("");
 			this.setTxtSenha("");
 			return true;
