@@ -46,14 +46,14 @@
 						<h:outputText value="#{item.placa}" />
 					</p:column>
 
-					<p:column headerText="Marca">
-						<h:outputText value="#{item.marca}" />
+					<p:column headerText="Fabricante">
+						<h:outputText value="#{item.fabricante}" />
 					</p:column>
 
 					<p:column headerText="Modelo">
 						<h:outputText value="#{item.modelo}" />
 					</p:column>
-					<p:column headerText="Visível"  style="width:48px;">
+					<p:column headerText="Visível" style="width:48px;">
 						<h:outputText value="#{(item.status==true)?'SIM':'NÃO'}" />
 					</p:column>
 					<!-- p:column style="width:20px">
@@ -85,15 +85,20 @@
 
 						<p:panelGrid columns="2" style="width:100%">
 							<p:outputLabel value="Visível: " />
-							<p:selectBooleanCheckbox value="#{VeiculoBean.veiculo.status}" itemLabel=""/>
+							<p:selectBooleanCheckbox value="#{VeiculoBean.veiculo.status}"
+								itemLabel="" />
 							<p:outputLabel value="Placa*: " />
-							<p:inputText class="input" value="#{VeiculoBean.veiculo.placa}"  disabled="#{!(VeiculoBean.createItem)}" />
-									<p:outputLabel value="Marca*: " />
-							<p:inputText class="input" value="#{VeiculoBean.veiculo.marca}" disabled="#{!(VeiculoBean.createItem)}" />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.placa}"
+								disabled="#{!(VeiculoBean.createItem)}" />
+							<p:outputLabel value="Fabricante*: " />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.fabricante}"
+								disabled="#{!(VeiculoBean.createItem)}" />
 							<p:outputLabel value="Modelo*: " />
-							<p:inputText class="input" value="#{VeiculoBean.veiculo.modelo}" disabled="#{!(VeiculoBean.createItem)}" />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.modelo}"
+								disabled="#{!(VeiculoBean.createItem)}" />
 							<p:outputLabel value="Chassi*: " />
-							<p:inputText class="input" value="#{VeiculoBean.veiculo.chassi}" disabled="#{!(VeiculoBean.createItem)}" />
+							<p:inputText class="input" value="#{VeiculoBean.veiculo.chassi}"
+								disabled="#{!(VeiculoBean.createItem)}" />
 							<p:outputLabel value="Descrição: " />
 							<p:inputTextarea class="input"
 								value="#{VeiculoBean.veiculo.descricao}" rows="2" cols="40" />
@@ -105,27 +110,28 @@
 							styleClass="ui-priority-primary" />
 						<p:commandButton value="Limpar" id="buttonClean1" update="@form"
 							style="width:100px;margin-right:10px;"
-							action="#{VeiculoBean.cleanForm}" styleClass="ui-priority-primary" />
+							action="#{VeiculoBean.cleanForm}"
+							styleClass="ui-priority-primary" />
+
 
 					</p:tab>
 					<p:tab title="Peças">
-<!-- 
-						<p:selectManyCheckbox id="grid2"
-							value="#{LivroBean.selectedCities2}" layout="responsive"
-							columns="1">
-							<f:selectItems value="#{LivroBean.cities}" var="city"
-								itemLabel="#{city}" itemValue="#{city}" />
+						<p:selectManyCheckbox id="custom" columns="1" layout="responsive"
+							value="#{VeiculoBean.veiculo.idsPecas}">
+							<f:selectItems value="#{VeiculoBean.pecasDisponives}" var="item"
+								itemLabel="#{item.nome}" itemValue="#{item.id}" />
 						</p:selectManyCheckbox>
+
 						<hr />
-						<p:commandButton value="Salvar" action="#{LivroBean.save}"
+						<p:commandButton value="Salvar" action="#{VeiculoBean.save}"
 							id="buttonSalvar2" update="@form"
 							style="width:100px;margin-right:10px;"
 							styleClass="ui-priority-primary" />
 						<p:commandButton value="Limpar" id="buttonClean2"
-							action="#{LivroBean.cleanForm}" update="@form"
+							action="#{VeiculoBean.cleanForm}" update="@form"
 							style="width:100px;margin-right:10px;"
 							styleClass="ui-priority-primary" />
-							 -->
+
 					</p:tab>
 				</p:tabView>
 

@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -8,7 +9,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import dao.VeiculoDao;
+import dao.PecaDao;
 import entities.Veiculo;
+import entities.Peca;
 
 @ManagedBean(name = "VeiculoBean")
 @SessionScoped
@@ -19,39 +22,22 @@ public class VeiculoBean extends GenericBean {
 	private List<Veiculo> filteredItens;
 	private Veiculo veiculo;
 
+	PecaDao pecaDao;
+	private List<Peca> pecasDisponives;
+
 	VeiculoDao veiculoDao;
 
-	public VeiculoBean(){
-		veiculoDao = new  VeiculoDao();
-		
+	public VeiculoBean() {
+		veiculoDao = new VeiculoDao();
+		pecaDao = new PecaDao();
+
 		this.veiculo = new Veiculo();
-		this.loadGrid();     	        
+		this.loadGrid();
+
+		pecasDisponives = pecaDao.getInstance().getList("");
+
 	}
 
-	public void setVeiculos(List<Veiculo> veiculos) {
-		this.veiculos = veiculos;
-	}
-
-	public List<Veiculo> getVeiculos() {
-		return veiculos;
-	}
-
-	public List<Veiculo> getFilteredItens() {
-		return filteredItens;
-	}
-
-	public void setFilteredItens(List<Veiculo> filteredItens) {
-		this.filteredItens = filteredItens;
-	}
-
-	public Veiculo getVeiculo() {
-		return this.veiculo;
-	}
-
-	public void setVeiculo(Veiculo veiculo) {
-		this.veiculo = veiculo;
-	}
-	
 	public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
 		String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
 		if (filterText == null || filterText.equals("")) {
@@ -66,7 +52,7 @@ public class VeiculoBean extends GenericBean {
 		if (item.getPlaca() != null && item.getPlaca().toString().contains(filterText)) {
 			return true;
 		}
-		if (item.getMarca() != null && item.getMarca().toLowerCase().contains(filterText)) {
+		if (item.getFabricante() != null && item.getFabricante().toLowerCase().contains(filterText)) {
 			return true;
 		}
 		if (item.getDescricao() != null && item.getDescricao().toLowerCase().contains(filterText)) {
@@ -80,10 +66,16 @@ public class VeiculoBean extends GenericBean {
 		this.veiculos = VeiculoDao.getInstance().getList("");
 	}
 
-	public void editForm() {
+	public boolean editForm() {
+		Veiculo find = veiculoDao.getInstance().find(this.veiculos.get(this.getIndexSelected())); 
+		if(find==null) {
+			this.addMessage("ERROR", "O item selecionado não foi encontrado!");
+			return false;
+		}
 		this.setTitleTabFrom("Edição");
 		this.setCreateItem(false);
-		this.veiculo = this.veiculos.get(this.getIndexSelected());
+		this.veiculo=find;
+		return true;
 	}
 
 	public void create() {
@@ -102,10 +94,10 @@ public class VeiculoBean extends GenericBean {
 			this.addMessage("WARNING", "Preencha o campo placa!");
 			return false;
 		}
-		/*if (this.livro.getAutor() == null || this.livro.getAutor().equals("")) {
-			this.addMessage("WARNING", "Preencha o campo autor!");
-			return false;
-		}*/
+		/*
+		 * if (this.livro.getAutor() == null || this.livro.getAutor().equals("")) {
+		 * this.addMessage("WARNING", "Preencha o campo autor!"); return false; }
+		 */
 		/*
 		 * if(this.livro.getPreco().toString().equals("")) { this.addMessage("WARNING",
 		 * "Preencha o campo preço!"); return false; }
@@ -140,6 +132,40 @@ public class VeiculoBean extends GenericBean {
 		} else {
 			this.addMessage("ERROR", "Não foi possível deletar esse item!");
 		}
+	}
+
+	/// ********* GETTERS AND SETTERS **********///
+
+	public void setVeiculos(List<Veiculo> veiculos) {
+		this.veiculos = veiculos;
+	}
+
+	public List<Veiculo> getVeiculos() {
+		return veiculos;
+	}
+
+	public List<Veiculo> getFilteredItens() {
+		return filteredItens;
+	}
+
+	public void setFilteredItens(List<Veiculo> filteredItens) {
+		this.filteredItens = filteredItens;
+	}
+
+	public Veiculo getVeiculo() {
+		return this.veiculo;
+	}
+
+	public void setVeiculo(Veiculo veiculo) {
+		this.veiculo = veiculo;
+	}
+
+	public List<Peca> getPecasDisponives() {
+		return pecasDisponives;
+	}
+
+	public void setPecasDisponives(List<Peca> pecasDisponives) {
+		this.pecasDisponives = pecasDisponives;
 	}
 
 }

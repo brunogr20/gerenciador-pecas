@@ -1,25 +1,39 @@
 package entities;
 
+import java.util.ArrayList;
+
 public class Veiculo {
 	
 	private String placa;
 	private String cpfUsuario;
-	private String marca;
+	private String fabricante;
 	private String modelo;
 	private String chassi;
 	private String descricao;
 	private boolean status;
+	private ArrayList<String> idsPecas;
 	
 	public Veiculo() {}
+	
+	
+    // consteutor dataTble
+	public Veiculo(String placa, String fabricante, String modelo, boolean status) {
+		super();
+		this.placa = placa;
+		this.fabricante = fabricante;
+		this.modelo = modelo;
+		this.status = status;
+	}
 
-	public Veiculo(String placa,String cpfUsuario, String marca, String modelo, String chassi, String descricao,boolean status) {
+	public Veiculo(String placa,String cpfUsuario, String fabricante, String modelo, String chassi, String descricao,boolean status,ArrayList<String> idsPecas) {
 		this.placa = placa;
 		this.cpfUsuario = cpfUsuario;
-		this.marca = marca;
+		this.fabricante = fabricante;
 		this.modelo = modelo;
 		this.chassi = chassi;
 		this.descricao = descricao;
 		this.status=status;
+		this.idsPecas=idsPecas;
 	}
 
 	public String getPlaca() {
@@ -38,12 +52,12 @@ public class Veiculo {
 		this.cpfUsuario = cpfUsuario;
 	}
 
-	public String getMarca() {
-		return marca;
+	public String getFabricante() {
+		return fabricante;
 	}
 
-	public void setMarca(String marca) {
-		this.marca = marca;
+	public void setFabricante(String fabricante) {
+		this.fabricante = fabricante;
 	}
 
 	public String getModelo() {
@@ -77,8 +91,14 @@ public class Veiculo {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
-	
-	
+
+	public ArrayList<String> getIdsPecas() {
+		return idsPecas;
+	}
+
+	public void setIdsPecas(ArrayList<String> idsPecas) {
+		this.idsPecas = idsPecas;
+	}
+		
 
 }
