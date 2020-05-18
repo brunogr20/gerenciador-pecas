@@ -1,38 +1,26 @@
 package controller;
 
+import java.io.IOException;
 import java.util.List;
+import session.Session;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import model.UserLogged;
 
 public class GenericBean<Generic> {
 
 	private String titleTabFrom = "Inserção";
 	private int indexSelected;
 	private boolean createItem = true;
+	private UserLogged userLogged;
 
-	public String getTitleTabFrom() {
-		return titleTabFrom;
-	}
+	Session session;
 
-	public void setTitleTabFrom(String titleTabFrom) {
-		this.titleTabFrom = titleTabFrom;
-	}
-
-	public int getIndexSelected() {
-		return indexSelected;
-	}
-
-	public void setIndexSelected(int indexSelected) {
-		this.indexSelected = indexSelected;
-	}
-
-	public boolean isCreateItem() {
-		return createItem;
-	}
-
-	public void setCreateItem(boolean createItem) {
-		this.createItem = createItem;
+	public GenericBean() {
+		session = new Session();
+		this.isLogged();
+		this.userLogged = session.getInstance().getUserLogged();
 	}
 
 	/*
@@ -57,6 +45,52 @@ public class GenericBean<Generic> {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", msg);
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+	}
+
+	public boolean isLogged() {
+		boolean status = true;
+		try {
+			if (!session.getInstance().isUserLogged()) {
+				FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+				status = false;
+			}
+		} catch (Exception e) {
+			status = false;
+		}
+
+		return status;
+	}
+
+	public UserLogged getUserLogged() {
+		return userLogged;
+	}
+
+	public void setUserLogged(UserLogged userLogged) {
+		this.userLogged = userLogged;
+	}
+
+	public String getTitleTabFrom() {
+		return titleTabFrom;
+	}
+
+	public void setTitleTabFrom(String titleTabFrom) {
+		this.titleTabFrom = titleTabFrom;
+	}
+
+	public int getIndexSelected() {
+		return indexSelected;
+	}
+
+	public void setIndexSelected(int indexSelected) {
+		this.indexSelected = indexSelected;
+	}
+
+	public boolean isCreateItem() {
+		return createItem;
+	}
+
+	public void setCreateItem(boolean createItem) {
+		this.createItem = createItem;
 	}
 
 }

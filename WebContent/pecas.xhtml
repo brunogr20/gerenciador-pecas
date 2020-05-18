@@ -15,8 +15,14 @@
 	<h:form>
 		<ui:include src="/templates/menu.xhtml" />
 		<!--p:graphicImage value="/storage/edit-tools.png" /-->
-		<h3
-			style="margin: 0px; margin-left: 9px; font-family: Arial, sans-serif;">Peças</h3>
+		<div style="display: flex; justify-content: space-between;">
+			<h3
+				style="margin: 0px; margin-left: 9px; font-family: Arial, sans-serif;">Peças</h3>
+			<div>
+				<p:outputLabel value="#{PecaBean.userLogged.nome} " />
+				| Alterar Senha
+			</div>
+		</div>
 
 		<div class="ui-g">
 			<div class="ui-g-6">
@@ -50,15 +56,15 @@
 						<h:outputText value="#{item.nome}" />
 					</p:column>
 
-					<p:column headerText="Visível"  style="width:48px;">
+					<p:column headerText="Visível" style="width:48px;">
 						<h:outputText value="#{(item.status==true)?'SIM':'NÃO'}" />
 					</p:column>
 					<!-- p:column style="width:20px">
 						<p:rowEditor />
 					</p:column-->
 					<p:column style="width:35px;text-align: center">
-						<p:commandButton action="#{PecaBean.editForm}"
-							icon="pi pi-pencil" update="@form" title="Editar">
+						<p:commandButton action="#{PecaBean.editForm}" icon="pi pi-pencil"
+							update="@form" title="Editar">
 							<f:setPropertyActionListener value="#{rowIdx}"
 								target="#{PecaBean.indexSelected}" />
 						</p:commandButton>
@@ -82,14 +88,15 @@
 
 						<p:panelGrid columns="2" style="width:100%">
 							<p:outputLabel value="Visível: " />
-							<p:selectBooleanCheckbox value="#{PecaBean.peca.status}" itemLabel=""/>
+							<p:selectBooleanCheckbox value="#{PecaBean.peca.status}"
+								itemLabel="" />
 							<p:outputLabel value="Nome*: " />
-							<p:inputText class="input" value="#{PecaBean.peca.nome}"   />
-									<p:outputLabel value="Valor*: " />
+							<p:inputText class="input" value="#{PecaBean.peca.nome}" />
+							<p:outputLabel value="Valor*: " />
 							<p:inputText class="input" value="#{PecaBean.peca.valor}" />
 							<p:outputLabel value="Descrição: " />
-							<p:inputTextarea class="input"
-								value="#{PecaBean.peca.descricao}" rows="2" cols="40" />
+							<p:inputTextarea class="input" value="#{PecaBean.peca.descricao}"
+								rows="2" cols="40" />
 						</p:panelGrid>
 						<hr />
 						<p:commandButton value="Salvar" action="#{PecaBean.save}"

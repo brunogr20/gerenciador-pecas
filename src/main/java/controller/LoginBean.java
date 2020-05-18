@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import session.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.faces.application.FacesMessage;
@@ -10,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.script.*;
 import dao.UsuarioDao;
 import entities.Usuario;
+import model.UserLogged;
 
 @ManagedBean(name = "LoginBean")
 @SessionScoped
@@ -17,10 +19,11 @@ import entities.Usuario;
 public class LoginBean implements Serializable {
 
 	private boolean exibirCadastro = false;
-	private String loginRedirect = "livros.xhtml";
+	private String loginRedirect = "home.xhtml";
 
 	private String txtEmail = "";
 	private String txtSenha = "";
+	private Session session = new Session();
 
 	public String getTxtEmail() {
 		return txtEmail;
@@ -64,7 +67,8 @@ public class LoginBean implements Serializable {
 		 Usuario userLoged = usuarioDao.login(this.getTxtEmail(),this.getTxtSenha());
 		if(userLoged!=null) {
 			this.alert("SUCCESSO","Usuario logado com sucesso!");
-			//FacesContext.getCurrentInstance().getExternalContext().redirect(this.loginRedirect);
+			session.getInstance().setUserLogged(new UserLogged(userLoged.getNome(),userLoged.getCpf(),userLoged.getEmail()));
+			FacesContext.getCurrentInstance().getExternalContext().redirect(this.loginRedirect);
 			this.setTxtEmail("");
 			this.setTxtSenha("");
 			return true;

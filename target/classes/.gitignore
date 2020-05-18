@@ -1,5 +1,7 @@
-/controller/
 /dao/
 /entities/
-/util/
 /iface/
+/model/
+/session/
+/util/
+/controller/

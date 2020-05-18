@@ -28,6 +28,8 @@ public class VeiculoBean extends GenericBean {
 	VeiculoDao veiculoDao;
 
 	public VeiculoBean() {
+		super();
+
 		veiculoDao = new VeiculoDao();
 		pecaDao = new PecaDao();
 
@@ -35,7 +37,7 @@ public class VeiculoBean extends GenericBean {
 		this.loadGrid();
 
 		pecasDisponives = pecaDao.getInstance().getList("");
-
+		//System.out.println(this.getUserLogged().getNome());
 	}
 
 	public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
@@ -63,18 +65,19 @@ public class VeiculoBean extends GenericBean {
 	}
 
 	public void loadGrid() {
+		System.out.println("dd");
 		this.veiculos = VeiculoDao.getInstance().getList("");
 	}
 
 	public boolean editForm() {
-		Veiculo find = veiculoDao.getInstance().find(this.veiculos.get(this.getIndexSelected())); 
-		if(find==null) {
+		Veiculo find = veiculoDao.getInstance().find(this.veiculos.get(this.getIndexSelected()));
+		if (find == null) {
 			this.addMessage("ERROR", "O item selecionado não foi encontrado!");
 			return false;
 		}
 		this.setTitleTabFrom("Edição");
 		this.setCreateItem(false);
-		this.veiculo=find;
+		this.veiculo = find;
 		return true;
 	}
 
@@ -94,10 +97,20 @@ public class VeiculoBean extends GenericBean {
 			this.addMessage("WARNING", "Preencha o campo placa!");
 			return false;
 		}
-		/*
-		 * if (this.livro.getAutor() == null || this.livro.getAutor().equals("")) {
-		 * this.addMessage("WARNING", "Preencha o campo autor!"); return false; }
-		 */
+
+		if (this.veiculo.getFabricante() == null || this.veiculo.getFabricante().equals("")) {
+			this.addMessage("WARNING", "Preencha o campo fabricante!");
+			return false;
+		}
+		if (this.veiculo.getModelo() == null || this.veiculo.getModelo().equals("")) {
+			this.addMessage("WARNING", "Preencha o campo modelo!");
+			return false;
+		}
+		if (this.veiculo.getChassi() == null || this.veiculo.getChassi().equals("")) {
+			this.addMessage("WARNING", "Preencha o campo chassi!");
+			return false;
+		}
+
 		/*
 		 * if(this.livro.getPreco().toString().equals("")) { this.addMessage("WARNING",
 		 * "Preencha o campo preço!"); return false; }

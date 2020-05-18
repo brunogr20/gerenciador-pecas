@@ -3,11 +3,19 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
+
 <p:breadCrumb>
 	<p:menuitem value="" url="#" />
 	<p:menuitem value="Veículos" url="veiculos.xhtml" />
 	<p:menuitem value="Peças" url="pecas.xhtml" />
+	<p:menuitem value="Sair" url="login.xhtml" />
 </p:breadCrumb>
 <br/>
+
+<p:dock position="bottom">
+    <p:menuitem value="Veículos" icon="/storage/vehicle.png" url="veiculos.xhtml"/>
+     <p:menuitem value="Peças" icon="/storage/car.png" url="pecas.xhtml"/>
+    <p:menuitem value="Sair" icon="/storage/interface.png" url="login.xhtml"/>
+</p:dock>
 
 </html>
