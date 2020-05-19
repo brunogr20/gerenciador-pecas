@@ -28,29 +28,7 @@ public class PecaBean extends GenericBean {
 		this.loadGrid();     	        
 	}
 
-	public void setPecas(List<Peca> pecas) {
-		this.pecas = pecas;
-	}
 
-	public List<Peca> getPecas() {
-		return pecas;
-	}
-
-	public List<Peca> getFilteredItens() {
-		return filteredItens;
-	}
-
-	public void setFilteredItens(List<Peca> filteredItens) {
-		this.filteredItens = filteredItens;
-	}
-
-	public Peca getPeca() {
-		return this.peca;
-	}
-
-	public void setPeca(Peca peca) {
-		this.peca = peca;
-	}
 	
 	public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
 		String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
@@ -142,6 +120,30 @@ public class PecaBean extends GenericBean {
 		} else {
 			this.addMessage("ERROR", "Não foi possível deletar esse item!");
 		}
+	}
+	
+	public void setPecas(List<Peca> pecas) {
+		this.pecas = pecas;
+	}
+
+	public List<Peca> getPecas() {
+		return pecas;
+	}
+
+	public List<Peca> getFilteredItens() {
+		return filteredItens;
+	}
+
+	public void setFilteredItens(List<Peca> filteredItens) {
+		this.filteredItens = filteredItens;
+	}
+
+	public Peca getPeca() {
+		return this.peca;
+	}
+
+	public void setPeca(Peca peca) {
+		this.peca = peca;
 	}
 
 }

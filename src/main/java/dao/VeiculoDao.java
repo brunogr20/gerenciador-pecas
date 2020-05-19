@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.Fabricante;
+import entities.Modelo;
 import entities.Peca;
 import entities.Veiculo;
 
@@ -27,17 +29,20 @@ public class VeiculoDao implements CRUD<Veiculo> {
 		try {
 			Connection conn = ConnectionDBUtil.gecConnection();
 
-			String sql = "SELECT PLACA,FABRICANTE,MODELO,STATUS FROM VEICULO  ";
+			String sql = "SELECT PLACA,ID_FABRICANTE,ID_MODELO,STATUS FROM VEICULO  ";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				veiculos.add(new Veiculo(rs.getString("PLACA"), rs.getString("FABRICANTE"), rs.getString("MODELO"),
+				Modelo modelo = ModeloDao.getInstance().find(rs.getLong("ID_MODELO"));
+				Fabricante fabricante = FabricanteDao.getInstance().find(rs.getLong("ID_FABRICANTE"));
+				fabricante.setModelo(modelo);
+				veiculos.add(new Veiculo(rs.getString("PLACA"), fabricante,
 						rs.getBoolean("STATUS")));
 			}
 			conn.close();
 		} catch (Exception e) {
-			System.out.println("Error: " + e.getMessage());
+			System.out.println("Error list veiculos: " + e.getMessage());
 		}
 		return veiculos;
 	}
@@ -46,7 +51,7 @@ public class VeiculoDao implements CRUD<Veiculo> {
 		Veiculo veiculo = null;
 		try {
 			Connection conn = ConnectionDBUtil.gecConnection();
-			String sql = "SELECT PLACA,FABRICANTE,MODELO,DESCRICAO,CHASSI,STATUS FROM VEICULO  WHERE PLACA='"
+			String sql = "SELECT PLACA,ID_FABRICANTE,id_MODELO,DESCRICAO,CHASSI,STATUS FROM VEICULO  WHERE PLACA='"
 					+ v.getPlaca() + "'";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
@@ -61,13 +66,16 @@ public class VeiculoDao implements CRUD<Veiculo> {
 					pecas.add(rsPk.getString("ID_PECA"));
 				}
 				// fim
-				veiculo = new Veiculo(rs.getString("PLACA"), "", rs.getString("FABRICANTE"), rs.getString("MODELO"),
+				Modelo modelo = ModeloDao.getInstance().find(rs.getLong("ID_MODELO"));
+				Fabricante fabricante = FabricanteDao.getInstance().find(rs.getLong("ID_FABRICANTE"));
+				fabricante.setModelo(modelo);
+				veiculo = new Veiculo(rs.getString("PLACA"), "",fabricante,
 						rs.getString("CHASSI"), rs.getString("DESCRICAO"), rs.getBoolean("STATUS"), pecas);
 			}
 
 			conn.close();
 		} catch (Exception e) {
-			System.out.println("Error: " + e.getMessage());
+			System.out.println("Error find veiculo: " + e.getMessage());
 		}
 
 		return veiculo;
@@ -79,11 +87,11 @@ public class VeiculoDao implements CRUD<Veiculo> {
 		try {
 
 			Connection conn = ConnectionDBUtil.gecConnection();
-			String sql = "INSERT INTO VEICULO (PLACA,FABRICANTE,MODELO,CHASSI,DESCRICAO,STATUS) VALUES (?,?,?,?,?,?)";
+			String sql = "INSERT INTO VEICULO (PLACA,ID_FABRICANTE,ID_MODELO,CHASSI,DESCRICAO,STATUS) VALUES (?,?,?,?,?,?)";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, veiculo.getPlaca());
-			ps.setString(2, veiculo.getFabricante());
-			ps.setString(3, veiculo.getModelo());
+			ps.setLong(2, veiculo.getFabricante().getId());
+			ps.setLong(3, veiculo.getFabricante().getModelo().getId());
 			ps.setString(4, veiculo.getChassi());
 			ps.setString(5, veiculo.getDescricao());
 			ps.setBoolean(6, veiculo.getStatus());
@@ -115,11 +123,13 @@ public class VeiculoDao implements CRUD<Veiculo> {
 		boolean status = false;
 		try {
 			Connection conn = ConnectionDBUtil.gecConnection();
-			String sql = "UPDATE VEICULO SET DESCRICAO=?,STATUS=? WHERE PLACA=?";
+			String sql = "UPDATE VEICULO SET ID_FABRICANTE=?,ID_MODELO=?, DESCRICAO=?,STATUS=? WHERE PLACA=?";
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, veiculo.getDescricao());
-			ps.setBoolean(2, veiculo.getStatus());
-			ps.setString(3, veiculo.getPlaca());
+			ps.setLong(1, veiculo.getFabricante().getId());
+			ps.setLong(2, veiculo.getFabricante().getModelo().getId());
+			ps.setString(3, veiculo.getDescricao());
+			ps.setBoolean(4, veiculo.getStatus());
+			ps.setString(5, veiculo.getPlaca());
 			ps.execute();
 
 			// alterando relacionamento entre veículos e peças
@@ -150,6 +160,27 @@ public class VeiculoDao implements CRUD<Veiculo> {
 			conn.close();
 		} catch (Exception e) {
 			System.out.println("Error update: " + e.getMessage());
+			status = false;
+		}
+
+		return status;
+	}
+	
+	public boolean checkPlaca(String placa) {
+		boolean status = true;
+		try {
+			Connection conn = ConnectionDBUtil.gecConnection();
+			String sql = "SELECT PLACA FROM VEICULO WHERE PLACA='"+placa+"'";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			//ps.setString(1,value);
+			 
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+			   status = false;
+			}
+			conn.close();
+		} catch (Exception e) {
+			System.out.println("Error: "+e.getMessage());
 			status = false;
 		}
 

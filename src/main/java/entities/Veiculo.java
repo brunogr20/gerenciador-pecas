@@ -6,8 +6,7 @@ public class Veiculo {
 	
 	private String placa;
 	private String cpfUsuario;
-	private String fabricante;
-	private String modelo;
+	private Fabricante fabricante = new Fabricante();
 	private String chassi;
 	private String descricao;
 	private boolean status;
@@ -17,19 +16,17 @@ public class Veiculo {
 	
 	
     // consteutor dataTble
-	public Veiculo(String placa, String fabricante, String modelo, boolean status) {
+	public Veiculo(String placa,Fabricante fabricante, boolean status) {
 		super();
 		this.placa = placa;
 		this.fabricante = fabricante;
-		this.modelo = modelo;
 		this.status = status;
 	}
 
-	public Veiculo(String placa,String cpfUsuario, String fabricante, String modelo, String chassi, String descricao,boolean status,ArrayList<String> idsPecas) {
+	public Veiculo(String placa,String cpfUsuario, Fabricante fabricante, String chassi, String descricao,boolean status,ArrayList<String> idsPecas) {
 		this.placa = placa;
 		this.cpfUsuario = cpfUsuario;
 		this.fabricante = fabricante;
-		this.modelo = modelo;
 		this.chassi = chassi;
 		this.descricao = descricao;
 		this.status=status;
@@ -52,20 +49,12 @@ public class Veiculo {
 		this.cpfUsuario = cpfUsuario;
 	}
 
-	public String getFabricante() {
+	public Fabricante getFabricante() {
 		return fabricante;
 	}
 
-	public void setFabricante(String fabricante) {
+	public void setFabricante(Fabricante fabricante) {
 		this.fabricante = fabricante;
-	}
-
-	public String getModelo() {
-		return modelo;
-	}
-
-	public void setModelo(String modelo) {
-		this.modelo = modelo;
 	}
 
 	public String getChassi() {

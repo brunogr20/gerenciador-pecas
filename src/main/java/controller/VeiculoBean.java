@@ -9,8 +9,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import dao.VeiculoDao;
+import dao.FabricanteDao;
+import dao.ModeloDao;
 import dao.PecaDao;
 import entities.Veiculo;
+import entities.Fabricante;
+import entities.Modelo;
 import entities.Peca;
 
 @ManagedBean(name = "VeiculoBean")
@@ -21,20 +25,26 @@ public class VeiculoBean extends GenericBean {
 	private List<Veiculo> veiculos;
 	private List<Veiculo> filteredItens;
 	private Veiculo veiculo;
-
-	PecaDao pecaDao;
+    private List<Fabricante>listaFabricantes;
+    private List<Modelo>listaModelos;
 	private List<Peca> pecasDisponives;
 
 	VeiculoDao veiculoDao;
+	PecaDao pecaDao;
+	FabricanteDao fabricanteDao;
+	ModeloDao modeloDao;
 
 	public VeiculoBean() {
-		super();
-
+	
 		veiculoDao = new VeiculoDao();
 		pecaDao = new PecaDao();
+		fabricanteDao = new FabricanteDao();
+		modeloDao = new ModeloDao();
 
-		this.veiculo = new Veiculo();
 		this.loadGrid();
+		this.veiculo = new Veiculo();
+		this.listaFabricantes =  fabricanteDao.getInstance().getList("");
+		this.listaModelos = new ArrayList<Modelo>();
 
 		pecasDisponives = pecaDao.getInstance().getList("");
 		//System.out.println(this.getUserLogged().getNome());
@@ -54,7 +64,7 @@ public class VeiculoBean extends GenericBean {
 		if (item.getPlaca() != null && item.getPlaca().toString().contains(filterText)) {
 			return true;
 		}
-		if (item.getFabricante() != null && item.getFabricante().toLowerCase().contains(filterText)) {
+		if (item.getFabricante().getNome() != null && item.getFabricante().getNome().toLowerCase().contains(filterText)) {
 			return true;
 		}
 		if (item.getDescricao() != null && item.getDescricao().toLowerCase().contains(filterText)) {
@@ -65,8 +75,19 @@ public class VeiculoBean extends GenericBean {
 	}
 
 	public void loadGrid() {
-		System.out.println("dd");
 		this.veiculos = VeiculoDao.getInstance().getList("");
+	}
+	
+	public boolean carregarModelos() {
+		Long id=this.veiculo.getFabricante().getId();
+		System.out.println("Change");
+		if(id!=null) {
+			this.setListaModelos( modeloDao.getInstance().getListFabricanteModelos(id));
+			System.out.println(this.listaModelos);
+		}else {
+			this.setListaModelos(new ArrayList<Modelo>());
+		}
+		return true;
 	}
 
 	public boolean editForm() {
@@ -75,6 +96,7 @@ public class VeiculoBean extends GenericBean {
 			this.addMessage("ERROR", "O item selecionado não foi encontrado!");
 			return false;
 		}
+		this.setListaModelos( modeloDao.getInstance().getListFabricanteModelos(find.getFabricante().getId()));
 		this.setTitleTabFrom("Edição");
 		this.setCreateItem(false);
 		this.veiculo = find;
@@ -88,6 +110,7 @@ public class VeiculoBean extends GenericBean {
 	public void cleanForm() {
 		this.setTitleTabFrom("Inserção");
 		this.setCreateItem(true);
+		this.setListaModelos(new ArrayList<Modelo>());
 		this.veiculo = new Veiculo();
 	}
 
@@ -97,28 +120,24 @@ public class VeiculoBean extends GenericBean {
 			this.addMessage("WARNING", "Preencha o campo placa!");
 			return false;
 		}
-
-		if (this.veiculo.getFabricante() == null || this.veiculo.getFabricante().equals("")) {
-			this.addMessage("WARNING", "Preencha o campo fabricante!");
+		if(this.isCreateItem()&&!veiculoDao.getInstance().checkPlaca(this.veiculo.getPlaca())) {
+			this.addMessage("WARNING", "Já existe um veículo cadastrado com essa placa!");
 			return false;
 		}
-		if (this.veiculo.getModelo() == null || this.veiculo.getModelo().equals("")) {
-			this.addMessage("WARNING", "Preencha o campo modelo!");
-			return false;
-		}
+		
 		if (this.veiculo.getChassi() == null || this.veiculo.getChassi().equals("")) {
 			this.addMessage("WARNING", "Preencha o campo chassi!");
 			return false;
 		}
 
-		/*
-		 * if(this.livro.getPreco().toString().equals("")) { this.addMessage("WARNING",
-		 * "Preencha o campo preço!"); return false; }
-		 * System.out.println(this.isDouble(this.livro.getPreco().toString()));
-		 * System.out.println("passou");
-		 * if(this.isDouble(this.livro.getPreco().toString())) {
-		 * this.addMessage("WARNING", "Preencha o campo preço!"); return false; }
-		 */
+		if (this.veiculo.getFabricante().getId() == null || this.veiculo.getFabricante().getId().equals("")) {
+			this.addMessage("WARNING", "Preencha o campo fabricante!");
+			return false;
+		}
+		if (this.veiculo.getFabricante().getModelo().getId() == null || this.veiculo.getFabricante().getModelo().getId().equals("")) {
+			this.addMessage("WARNING", "Preencha o campo modelo!");
+			return false;
+		}
 
 		boolean status;
 		if (this.isCreateItem()) {
@@ -180,5 +199,23 @@ public class VeiculoBean extends GenericBean {
 	public void setPecasDisponives(List<Peca> pecasDisponives) {
 		this.pecasDisponives = pecasDisponives;
 	}
+
+	public List<Fabricante> getListaFabricantes() {
+		return listaFabricantes;
+	}
+
+	public void setListaFabricantes(List<Fabricante> listaFabricantes) {
+		this.listaFabricantes = listaFabricantes;
+	}
+
+	public List<Modelo> getListaModelos() {
+		return listaModelos;
+	}
+
+	public void setListaModelos(List<Modelo> listaModelos) {
+		this.listaModelos = listaModelos;
+	}
+	
+	
 
 }

@@ -15,11 +15,13 @@
 	<h:form>
 		<ui:include src="/templates/menu.xhtml" />
 		<!--p:graphicImage value="/storage/edit-tools.png" /-->
-		<div style="display:flex;justify-content: space-between;">
+		<div style="display: flex; justify-content: space-between;">
 			<h3
 				style="margin: 0px; margin-left: 9px; font-family: Arial, sans-serif;">Veículos</h3>
-			<div><p:outputLabel value="#{VeiculoBean.userLogged.nome} " />
-			| Alterar Senha</div>
+			<div>
+				<p:outputLabel value="#{VeiculoBean.userLogged.nome} " />
+				| Alterar Senha
+			</div>
 		</div>
 		<div class="ui-g">
 			<div class="ui-g-6">
@@ -50,11 +52,11 @@
 					</p:column>
 
 					<p:column headerText="Fabricante">
-						<h:outputText value="#{item.fabricante}" />
+						<h:outputText value="#{item.fabricante.nome}" />
 					</p:column>
 
 					<p:column headerText="Modelo">
-						<h:outputText value="#{item.modelo}" />
+						<h:outputText value="#{item.fabricante.modelo.nome}" />
 					</p:column>
 					<p:column headerText="Visível" style="width:48px;">
 						<h:outputText value="#{(item.status==true)?'SIM':'NÃO'}" />
@@ -93,15 +95,28 @@
 							<p:outputLabel value="Placa*: " />
 							<p:inputText class="input" value="#{VeiculoBean.veiculo.placa}"
 								disabled="#{!(VeiculoBean.createItem)}" />
-							<p:outputLabel value="Fabricante*: " />
-							<p:inputText class="input" value="#{VeiculoBean.veiculo.fabricante}"
-								disabled="#{!(VeiculoBean.createItem)}" />
-							<p:outputLabel value="Modelo*: " />
-							<p:inputText class="input" value="#{VeiculoBean.veiculo.modelo}"
-								disabled="#{!(VeiculoBean.createItem)}" />
-							<p:outputLabel value="Chassi*: " />
+									<p:outputLabel value="Chassi*: " />
 							<p:inputText class="input" value="#{VeiculoBean.veiculo.chassi}"
 								disabled="#{!(VeiculoBean.createItem)}" />
+							<p:outputLabel value="Fabricante*: " />
+							<p:selectOneMenu id="cadFabricante" 
+								value="#{VeiculoBean.veiculo.fabricante.id}" class="input"
+								style="width:95%">
+								<f:selectItem itemLabel="Escolha uma opção" itemValue="" />
+								<f:selectItems value="#{VeiculoBean.listaFabricantes}" var="e"
+									itemLabel="#{e.nome}" itemValue="#{e.id}" />
+									  <f:ajax listener="#{VeiculoBean.carregarModelos}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Modelo*: " />
+							<p:selectOneMenu id="cadModelo"
+								value="#{VeiculoBean.veiculo.fabricante.modelo.id}" class="input"
+								style="width:95%">
+								<f:selectItem itemLabel="Escolha uma opção" itemValue="" />
+								<f:selectItems value="#{VeiculoBean.listaModelos}" var="e"
+									itemLabel="#{e.nome}" itemValue="#{e.id}" />
+							</p:selectOneMenu>
+						
 							<p:outputLabel value="Descrição: " />
 							<p:inputTextarea class="input"
 								value="#{VeiculoBean.veiculo.descricao}" rows="2" cols="40" />
